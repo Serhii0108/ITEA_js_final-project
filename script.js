@@ -21,11 +21,11 @@ function getNames() {
 // creating and object with names and positions
 function createTeam(arrA, arrB) {
 	let employeeData = {};
-	let newTeam = [];
+	let newTeam = {};
 	for (let i = 0; i < arrA.length; i++) {
 		employeeData.name = arrA[i];
 		employeeData.position = arrB[i];
-		newTeam.push(JSON.parse(JSON.stringify(employeeData)));
+		newTeam[i + 1] = (JSON.parse(JSON.stringify(employeeData)));
 	}
 	return newTeam;
 }
@@ -41,18 +41,20 @@ function getRandomNumber(min, max) {
 }
 
 // adding salary to employee's object
-function addSalary(arr) {
-	arr.map(item => {
-		let rank = item.position.toLowerCase();
-		if (rank.indexOf('junior') >= 0) {
-			item.salary = getRandomNumber(500, 1000);
-		} else if ((rank.indexOf('middle') >= 0)) {
-			item.salary = getRandomNumber(1500, 2000);
-		} else if ((rank.indexOf('senior') >= 0)) {
-			item.salary = getRandomNumber(2500, 3000);
-		} else { item.salary = getRandomNumber(4000, 4500); }
-	});
-	return arr;
+function addSalary(obj) {
+	for (let prop in obj) {
+		for (let key in obj[prop]) {
+			let rank = obj[prop][key].toLowerCase();
+			if (rank.indexOf('junior') >= 0) {
+				Object.assign(obj[prop], { salary: getRandomNumber(500, 1000) })
+			} else if ((rank.indexOf('middle') >= 0)) {
+				Object.assign(obj[prop], { salary: getRandomNumber(1500, 2000) });
+			} else if ((rank.indexOf('senior') >= 0)) {
+				Object.assign(obj[prop], { salary: getRandomNumber(2500, 3000) });
+			} else { Object.assign(obj[prop], { salary: getRandomNumber(4000, 4500) }); }
+		}
+	}
+	return obj;
 }
 
 // console.log(addSalary(createTeam(getNames(), position)));
@@ -60,25 +62,29 @@ function addSalary(arr) {
 
 // TASK 4
 // adding the method for display of the object "Employee"
-function tellAboutEmployee(arr) {
-	arr.map(item => {
-		item.tellAboutYourself = function () {
-			document.write(`My name is ${item.name}, I am a ${item.position}, my salary is ${item.salary}` + "<br/>");
+
+function tellAboutEmployee(obj) {
+	for (let key in obj) {
+		obj[key].tellAboutYourself = function () {
+			document.write(`My name is ${this.name}, I am a ${this.position}, my salary is ${this.salary}` + "<br/>")
 		}
-		return arr;
-	})
+	}
+	return obj;
 }
+
+// function tellAboutYourself() { document.write(`My name is ${this[key].name}, I am a ${this[key].position}, my salary is ${this[key].salary}` + "<br/>") };
+
 
 
 // TASK 5
 // adding the method for display of the object "Team"
 function teamDisplay(obj) {
 	obj.showTeam = function () {
-		obj.forEach(item => {
-			if (typeof item != "function") {
-				document.write(`${item.name} - ${item.position}. Salary - ${item.salary}` + "<br/>");
+		for (let prop in obj) {
+			if (typeof obj[prop] != "function") {
+				document.write(`${obj[prop].name} - ${obj[prop].position}. Salary - ${obj[prop].salary}` + "<br/>");
 			}
-		});
+		};
 	}
 }
 
@@ -89,8 +95,12 @@ teamDisplay(team);
 console.log(team);
 
 // display of the method in object "Employee"
-team.forEach(item => {
-	item.tellAboutYourself();
-})
+for (let key in team) {
+	if (typeof team[key] === "function") {
+		continue;
+	} else {
+		team[key].tellAboutYourself();
+	}
+}
 document.write("<hr/>")
 team.showTeam();
