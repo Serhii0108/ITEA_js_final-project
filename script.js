@@ -21,13 +21,13 @@ function getNames() {
 // creating and object with names and positions
 function createTeam(arrA, arrB) {
 	let employeeData = {};
-	let team = [];
+	let newTeam = [];
 	for (let i = 0; i < arrA.length; i++) {
 		employeeData.name = arrA[i];
 		employeeData.position = arrB[i];
-		team.push(JSON.parse(JSON.stringify(employeeData)));
+		newTeam.push(JSON.parse(JSON.stringify(employeeData)));
 	}
-	return team;
+	return newTeam;
 }
 
 // console.log(createTeam(getNames(), position));
@@ -72,9 +72,9 @@ function tellAboutEmployee(arr) {
 
 // TASK 5
 // adding the method for display of the object "Team"
-function teamDisplay(arr) {
-	arr.showteam = function () {
-		arr.forEach(item => {
+function teamDisplay(obj) {
+	obj.showTeam = function () {
+		obj.forEach(item => {
 			if (typeof item != "function") {
 				document.write(`${item.name} - ${item.position}. Salary - ${item.salary}` + "<br/>");
 			}
@@ -83,26 +83,14 @@ function teamDisplay(arr) {
 }
 
 // running the functions
-let completeTeam = addSalary(createTeam(getNames(), position));
-tellAboutEmployee(completeTeam);
-teamDisplay(completeTeam);
-console.log(completeTeam);
+let team = addSalary(createTeam(getNames(), position));
+tellAboutEmployee(team);
+teamDisplay(team);
+console.log(team);
 
 // display of the method in object "Employee"
-completeTeam.forEach(item => {
+team.forEach(item => {
 	item.tellAboutYourself();
 })
 document.write("<hr/>")
-completeTeam.showteam();
-
-
-
-
-
-
-
-
-
-
-
-
+team.showTeam();
